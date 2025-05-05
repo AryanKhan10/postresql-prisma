@@ -1,27 +1,27 @@
 import prisma from "../db/db.config.js";
 
-const createPost = async(req, res)=>{
+const createComment = async(req, res)=>{
     try {
         // console.log(req.body)
-        const { userId,title,description} = req.body;
-        if(!userId || !title || !description) {
+        const { userId, postId, comment} = req.body;
+        if(!userId || !postId || !comment) {
             return res.status(400).json({
                 success:false,
                 message:"all fields are required"
             })
         }
 
-        const newPost = await prisma.post.create({
+        const newComment = await prisma.comment.create({
             data:{
                 userId:userId,
-                title:title,
-                description:description,
+                postId:postId,
+                comment:comment,
             }
         })
         res.status(200).json({
             success:true,
-            message:"Post created",
-            newPost
+            message:"Comment created",
+            newComment
         })
     } catch (error) {
         console.log("Error: ",error)
@@ -32,39 +32,38 @@ const createPost = async(req, res)=>{
         })
     }
 }
-const updatePost = async(req, res)=>{
+const updateComment = async(req, res)=>{
     try {
         // console.log(req.params)
         const id = req.params.id
         // console.log(typeof(id))
-        const { title,description} = req.body;
+        const { comment } = req.body;
 
-        const findPost = await prisma.post.findFirst({
+        const findComment = await prisma.comment.findFirst({
             where:{
-                id:Number(id)
+                id:id
             }
         })
-        console.log("findPost ",findPost)
-        if(!findPost){
+        console.log("findComment ",findComment)
+        if(!findComment){
             return res.status(404).json({
                 success:false,
-                message:"Post doesn't exist"
+                message:"comment doesn't exist"
             })
         }
 
-        const updatedPost = await prisma.post.update({
+        const updatedComment = await prisma.comment.update({
             where:{
-                id:Number(id)
+                id:id
             },
             data:{
-                title:title,
-                description:description,
+                comment,
             }
         })
         res.status(200).json({
             success:true,
-            message:"Post updated",
-            updatedPost
+            message:"comment updated",
+            updatedComment
         })
     } catch (error) {
         console.log("Error: ",error)
@@ -75,27 +74,27 @@ const updatePost = async(req, res)=>{
         })
     }
 }
-const deletePost = async(req, res)=>{
+const deleteComment = async(req, res)=>{
     try {
         console.log(req.params)
         const { id } = req.params;
 
-        const deletedPost = await prisma.post.delete({
+        const deletedComment = await prisma.comment.delete({
             where:{
-                id:Number(id)
+                id:id
             }
         })
-        console.log("deletedPost ",deletedPost)
-        if(!deletedPost){
+        console.log("deletedComment ",deletedComment)
+        if(!deletedComment){
             return res.status(404).json({
                 success:false,
-                message:"Post doesn't exist"
+                message:"Comment doesn't exist"
             })
         }
 
         res.status(200).json({
             success:true,
-            message:"Post deleted",
+            message:"Comment deleted",
         })
     } catch (error) {
         console.log("Error: ",error)
@@ -106,15 +105,15 @@ const deletePost = async(req, res)=>{
         })
     }
 }
-const getAllPost = async(req, res)=>{
+const getAllComments = async(req, res)=>{
     
     try {
-        const allPost = await prisma.post.findMany()
+        const allComments = await prisma.comment.findMany()
 
         res.status(200).json({
             success:true,
-            message:"Posts fetched",
-            allPost
+            message:"Comment fetched",
+            allComments
         })
     }catch (error) {
         console.log("Error: ",error)
@@ -128,4 +127,4 @@ const getAllPost = async(req, res)=>{
 
 
 
-export {createPost, updatePost, deletePost, getAllPost}
+export {createComment, updateComment, deleteComment, getAllComments}
