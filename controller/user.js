@@ -131,7 +131,26 @@ const deleteUser = async(req, res)=>{
 const getAllUsers = async(req, res)=>{
     try {
 
-        const allUsers = await prisma.user.findMany()
+        //Get all users total comments and posts seperatly
+        const allUsers = await prisma.user.findMany({
+            select:{
+                _count:{
+                    select:{
+                        post:true,
+                        comment:true,
+                    }
+                }
+            }
+        })
+
+        // get all user with their posts and comments
+        // const allUsers = await prisma.user.findMany({
+ 
+        //     // include:{
+        //     //     post:true,
+        //     //     comment:true
+        //     // }
+        // })
 
         res.status(200).json({
             success:true,

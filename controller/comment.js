@@ -108,7 +108,16 @@ const deleteComment = async(req, res)=>{
 const getAllComments = async(req, res)=>{
     
     try {
-        const allComments = await prisma.comment.findMany()
+        const allComments = await prisma.comment.findMany({
+            include:{
+                user:true, //who has commented
+                post:{
+                    include:{
+                        user:true // who's post it is
+                    }
+                }
+            }
+        })
 
         res.status(200).json({
             success:true,

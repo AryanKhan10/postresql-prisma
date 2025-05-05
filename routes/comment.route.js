@@ -5,5 +5,5 @@ const router= Router()
 router.post("/create",createComment)
 router.put("/update/:id",updateComment)
 router.delete("/delete/:id",deleteComment)
-router.get("/getAllPosts",getAllComments)
+router.get("/getAllComments",getAllComments)
 export default router

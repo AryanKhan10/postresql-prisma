@@ -109,7 +109,21 @@ const deletePost = async(req, res)=>{
 const getAllPost = async(req, res)=>{
     
     try {
-        const allPost = await prisma.post.findMany()
+        const allPost = await prisma.post.findMany({
+            include:{
+                comments:{
+                    include:{
+                        // user:true
+                        user:{
+                            select:{
+                                firstname:true
+                            }
+                        }
+                    }
+                }
+            },
+            orderBy: { id:"desc" }
+        })
 
         res.status(200).json({
             success:true,
